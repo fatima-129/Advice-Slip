@@ -1,0 +1,36 @@
+import { useEffect, useState } from "react";
+import "./styles.css";
+
+export default function App() {
+  const [advice, setAdvice] = useState("");
+  const [count, setCount] = useState(0);
+
+  async function getAdvice() {
+    const res = await fetch("https://api.adviceslip.com/advice");
+    const data = await res.json();
+    setAdvice(data.slip.advice);
+    setCount((c) => c + 1);
+  }
+
+  useEffect(function () {
+    getAdvice();
+  }, []);
+
+  return (
+    <div className="container">
+      <div className="box">
+        <h1>{advice}</h1>
+        <button onClick={getAdvice}>Get advice</button>
+        <Message count={count} />
+      </div>
+    </div>
+  );
+}
+
+function Message({ count }) {
+  return (
+    <div className="count">
+      <p>You have read {count} pieces of advice</p>
+    </div>
+  );
+}
